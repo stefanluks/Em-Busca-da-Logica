@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Em Busca da Lógica - LOGIC STEP</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- TELA INICIAL -->
+    <div id="menuScreen" class="screen active">
+        <div class="menu-container">
+            <h1>Em Busca da Lógica</h1>
+            <p class="subtitle">LOGIC STEP - Game of Programming Logic</p>
+            <div class="robot-art">
+                <div class="robot-head"></div>
+                <div class="robot-body"></div>
+            </div>
+            <button class="btn btn-primary" onclick="goToLevelSelect()">Começar Jogo</button>
+            <button class="btn btn-secondary" onclick="showInstructions()">Instruções</button>
+            <a href="./FaseEditor/" class="btn btn-secondary" onclick="showInstructions()">Editor de Fases</a>
+        </div>
+    </div>
+
+    <!-- TELA DE INSTRUÇÕES -->
+    <div id="instructionsScreen" class="screen">
+        <div class="instructions-container">
+            <h2>Como Jogar</h2>
+            <div class="instructions-content">
+                <h3>Objetivo</h3>
+                <p>Guiar o robô Bit até o objetivo (bloco amarelo) usando blocos de comando lógico.</p>
+                
+                <h3>Comandos Disponíveis</h3>
+                <ul>
+                    <li><strong>Andar →</strong> Move o robô para frente</li>
+                    <li><strong>Esquerda ↶</strong> Vira 90° para a esquerda</li>
+                    <li><strong>Direita ↷</strong> Vira 90° para a direita</li>
+                    <li><strong>Repetir N</strong> Repete os próximos comandos N vezes</li>
+                    <li><strong>Se Livre</strong> Executa se o caminho à frente está livre</li>
+                </ul>
+
+                <h3>Como Jogar</h3>
+                <ol>
+                    <li>Arraste blocos de comando da lateral para a área central</li>
+                    <li>Organize-os na ordem correta</li>
+                    <li>Clique em "Executar" para rodar a sequência</li>
+                    <li>Se errar, clique "Reiniciar"</li>
+                </ol>
+
+                <h3>Ganhos de Cada Fase</h3>
+                <ul>
+                    <li>Ganha estrelas por usar menos comandos</li>
+                    <li>Desbloqueia novos tipos de comando conforme avança</li>
+                </ul>
+            </div>
+            <button class="btn btn-primary" onclick="backToMenu()">Voltar</button>
+        </div>
+    </div>
+
+    <!-- TELA DE SELEÇÃO DE FASES -->
+    <div id="levelSelectScreen" class="screen">
+        <div class="level-select-container">
+            <h2>Selecione uma Fase</h2>
+            <div class="levels-grid">
+                <div class="level-card" onclick="startLevel(1)">
+                    <div class="level-number">Fase 1</div>
+                    <div class="level-title">Sequência Simples</div>
+                    <div class="level-desc">Aprenda a executar comandos em sequência</div>
+                </div>
+                <div class="level-card" onclick="startLevel(2)">
+                    <div class="level-number">Fase 2</div>
+                    <div class="level-title">Otimização</div>
+                    <div class="level-desc">Atinja o objetivo com limite de 5 comandos</div>
+                </div>
+                <div class="level-card" onclick="startLevel(3)">
+                    <div class="level-number">Fase 3</div>
+                    <div class="level-title">Laço de Repetição</div>
+                    <div class="level-desc">Domine o comando Repetir</div>
+                </div>
+                <div class="level-card" onclick="startLevel(4)">
+                    <div class="level-number">Fase 4</div>
+                    <div class="level-title">Condições Lógicas</div>
+                    <div class="level-desc">Use decisões para resolver o puzzle</div>
+                </div>
+                <div class="level-card" onclick="startLevel(5)">
+                    <div class="level-number">Fase 5</div>
+                    <div class="level-title">Algoritmo Complexo</div>
+                    <div class="level-desc">Combine tudo que aprendeu</div>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="backToMenu()">Voltar</button>
+        </div>
+    </div>
+
+    <!-- TELA DE GAMEPLAY -->
+    <div id="gameScreen" class="screen">
+        <div class="game-container">
+            <!-- Painel Esquerdo: Canvas -->
+            <div class="game-left">
+                <div class="level-info">
+                    <h2 id="levelTitle">Fase 1</h2>
+                    <p id="levelDesc">Descrição</p>
+                </div>
+                <canvas id="gameCanvas" width="500" height="500"></canvas>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span>Comandos usados:</span>
+                        <strong id="commandCount">0</strong>
+                    </div>
+                    <div class="stat">
+                        <span>Limite:</span>
+                        <strong id="commandLimit">∞</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel Direito: Editor de Comandos -->
+            <div class="game-right">
+                <div class="command-palette">
+                    <h3>Blocos de Comando</h3>
+                    <div class="command-buttons">
+                        <button class="cmd-btn" draggable="true" ondragstart="dragStart(event, 'forward')">
+                            <span class="cmd-icon">→</span>
+                            <span>Andar</span>
+                        </button>
+                        <button class="cmd-btn" draggable="true" ondragstart="dragStart(event, 'left')">
+                            <span class="cmd-icon">↶</span>
+                            <span>Esquerda</span>
+                        </button>
+                        <button class="cmd-btn" draggable="true" ondragstart="dragStart(event, 'right')">
+                            <span class="cmd-icon">↷</span>
+                            <span>Direita</span>
+                        </button>
+                        <button id="repeatBtn" class="cmd-btn" draggable="true" ondragstart="dragStart(event, 'repeat')" style="display: none;">
+                            <span class="cmd-icon">⟲</span>
+                            <span>Repetir</span>
+                        </button>
+                        <button id="ifBtn" class="cmd-btn" draggable="true" ondragstart="dragStart(event, 'if')" style="display: none;">
+                            <span class="cmd-icon">?</span>
+                            <span>Se Livre</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="command-sequence">
+                    <h3>Sequência de Comandos</h3>
+                    <div class="sequence-area" id="sequenceArea" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <p class="placeholder">Arraste comandos aqui</p>
+                    </div>
+                    <button class="btn btn-small" onclick="clearSequence()">Limpar</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success" onclick="executeSequence()">▶ Executar</button>
+                    <button class="btn btn-warning" onclick="resetLevel()">↻ Reiniciar</button>
+                    <button class="btn btn-primary" onclick="backToLevelSelect()">Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA DE VITÓRIA -->
+    <div id="victoryScreen" class="screen">
+        <div class="victory-container">
+            <h2>Parabéns!</h2>
+            <div class="victory-art">Bit alcançou o objetivo!</div>
+            <div class="victory-stats">
+                <div class="stat">
+                    <span>Comandos usados:</span>
+                    <strong id="finalCommandCount">0</strong>
+                </div>
+                <div class="stat">
+                    <span>Melhor possível:</span>
+                    <strong id="optimalCommandCount">0</strong>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="nextLevel()">Próxima Fase</button>
+            <button class="btn btn-secondary" onclick="backToLevelSelect()">Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <!-- TELA DE DERROTA -->
+    <div id="defeatScreen" class="screen">
+        <div class="defeat-container">
+            <h2>Erro na Sequência</h2>
+            <div class="defeat-art">Bit colidiu com um obstáculo!</div>
+            <p id="defeatMessage">Verifique sua sequência de comandos e tente novamente.</p>
+            <button class="btn btn-primary" onclick="resetLevel()">Tentar Novamente</button>
+            <button class="btn btn-secondary" onclick="backToLevelSelect()">Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

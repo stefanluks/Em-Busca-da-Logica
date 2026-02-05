@@ -1,0 +1,575 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Screens */
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    display: none;
+    z-index: 10;
+}
+
+.screen.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Menu Screen */
+.menu-container {
+    text-align: center;
+    color: white;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.menu-container h1 {
+    font-size: 4em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    font-size: 1.2em;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.robot-art {
+    width: 120px;
+    height: 120px;
+    margin: 30px auto;
+}
+
+.robot-head {
+    width: 60px;
+    height: 60px;
+    background: #FFD700;
+    border: 3px solid #333;
+    border-radius: 8px;
+    margin: 0 auto 10px;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.robot-head::before,
+.robot-head::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #333;
+    border-radius: 50%;
+    top: 15px;
+}
+
+.robot-head::before {
+    left: 12px;
+}
+
+.robot-head::after {
+    right: 12px;
+}
+
+.robot-body {
+    width: 60px;
+    height: 50px;
+    background: #0088FF;
+    border: 3px solid #333;
+    margin: 0 auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #0088FF;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0066CC;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 136, 255, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background: white;
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: #10B981;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.btn-warning {
+    background: #F59E0B;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #D97706;
+    transform: translateY(-2px);
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 0.9em;
+    margin: 5px;
+}
+
+/* Instructions Screen */
+.instructions-container {
+    background: white;
+    color: #333;
+    padding: 40px;
+    border-radius: 12px;
+    width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.instructions-container h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+.instructions-content h3 {
+    color: #764ba2;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.instructions-content ul,
+.instructions-content ol {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.instructions-content li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+/* Level Select Screen */
+.level-select-container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    width: 75%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.level-select-container h2 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 30px;
+}
+
+.levels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.level-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.level-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.level-number {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.level-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.level-desc {
+    font-size: 0.9em;
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+/* Game Screen */
+.game-container {
+    display: flex;
+    width: 95vw;
+    height: 95vh;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.game-left {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background: #f8f9fa;
+}
+
+.game-right {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-left: 2px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.level-info h2 {
+    color: #667eea;
+    margin-bottom: 5px;
+}
+
+.level-info p {
+    color: #666;
+    font-size: 0.95em;
+    margin-bottom: 15px;
+}
+
+#gameCanvas {
+    flex: 1;
+    border: 2px solid #ddd;
+    background: white;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+.game-stats {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.stat {
+    background: #f0f0f0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.stat span {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.stat strong {
+    display: block;
+    font-size: 1.5em;
+    color: #667eea;
+}
+
+/* Command Palette */
+.command-palette {
+    margin-bottom: 20px;
+}
+
+.command-palette h3 {
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.command-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.cmd-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: 2px solid transparent;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: grab;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.cmd-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.cmd-btn:active {
+    cursor: grabbing;
+}
+
+.cmd-icon {
+    font-size: 1.5em;
+}
+
+/* Command Sequence */
+.command-sequence {
+    flex: 1;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.command-sequence h3 {
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.sequence-area {
+    flex: 1;
+    background: #f8f9fa;
+    border: 2px dashed #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sequence-area.drag-over {
+    background: #e8f0ff;
+    border-color: #667eea;
+}
+
+.placeholder {
+    color: #999;
+    text-align: center;
+    margin: auto;
+    font-style: italic;
+}
+
+.command-block {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: grab;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.2s ease;
+}
+
+.command-block:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.command-block:active {
+    cursor: grabbing;
+}
+
+.command-block.repeat-block,
+.command-block.if-block {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+.command-block.repeat-block .block-content::before {
+    content: '[';
+    margin-right: 5px;
+}
+
+.command-block.repeat-block .block-content::after {
+    content: ']';
+    margin-left: 5px;
+}
+
+.command-block.if-block .block-content::before {
+    content: '? ';
+}
+
+.block-content {
+    flex: 1;
+}
+
+.block-remove {
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    color: white;
+    border-radius: 3px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.block-remove:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+/* Victory Screen */
+.victory-container,
+.defeat-container {
+    text-align: center;
+    background: white;
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: scaleIn 0.3s ease-out;
+}
+
+.victory-container h2,
+.defeat-container h2 {
+    font-size: 2.5em;
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+.victory-art,
+.defeat-art {
+    font-size: 4em;
+    margin: 20px 0;
+}
+
+.victory-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.defeat-container p {
+    color: #666;
+    margin: 20px 0;
+    font-size: 1.1em;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .game-container {
+        flex-direction: column;
+    }
+
+    .game-right {
+        border-left: none;
+        border-top: 2px solid #e0e0e0;
+    }
+
+    .command-buttons {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .menu-container h1 {
+        font-size: 2.5em;
+    }
+
+    .levels-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #gameCanvas {
+        width: 100%;
+        height: 300px;
+    }
+    
+    .game-container {
+        width: 100vw;
+        height: 100vh;
+    }
+    
+    .command-buttons {
+        grid-template-columns: 1fr 1fr;
+    }
+}

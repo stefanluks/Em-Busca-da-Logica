@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Em Busca da Lógica - FASE EDITOR</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="./editor.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <div class="menu">
+        <div class="menu-itens">
+            <h1>Editor de Fase </h1>
+            <p class="subtitle">Em busca da Lógica</p>
+            <div class="menu-opcoes">
+                <button class="btn btn-secondary">Nova Fase</button>
+                <button class="btn btn-secondary">Editar Fase</button>
+                <button class="btn btn-secondary">Configuração</button>
+                <button id="btn-salvar-obj" class="btn btn-secondary">GERAR OBJ</button>
+                <button id="btn-salvar-json" class="btn btn-secondary">GERAR JSON</button>
+                <a href="../" class="btn btn-secondary">Voltar Para o Jogo</a>
+            </div>
+        </div>
+        <div class="renderizacao">
+            <canvas id="canvas-editor" width="500" height="500"></canvas>
+            <div action="" class="config">
+                <input class="input-text btn btn-secondary" id="nome" value="Nova Fase" placeholder="Nome da Fase">
+                <input class="input-text btn btn-secondary" id="descricao" value="Descrição da fase" placeholder="Descrição da Fase">
+                <div class="w-100">
+                    <label for="grid">Grid:</label>
+                    <input type="number" id="grid" class="input-num btn btn-secondary" value="8">
+                    <label for="tileSize">Tile Size:</label>
+                    <input type="number" id="tileSize" class="input-num btn btn-secondary" value="60">
+                </div>
+                <div class="w-100">
+                    <label for="limite">Limite:</label>
+                    <input type="number" id="limite" class="input-num btn btn-secondary" value="0">
+                    <label for="minimo">Minimo:</label>
+                    <input type="number" id="minimo" class="input-num btn btn-secondary" value="4">
+                </div>
+                <div class="w-100">
+                    <div class="w-100">Posição Inicial:</div>
+                    <label for="startX">startX:</label>
+                    <input type="number" id="startX" class="input-num btn btn-secondary" value="1">
+                    <label for="startY">startY:</label>
+                    <input type="number" id="startY" class="input-num btn btn-secondary" value="1">
+                </div>
+                <div class="w-100">
+                    <div class="w-100">Objetivo:</div>
+                    <label for="goalX">goalX:</label>
+                    <input type="number" id="goalX" class="input-num btn btn-secondary" value="6">
+                    <label for="goalY">goalY:</label>
+                    <input type="number" id="goalY" class="input-num btn btn-secondary" value="1">
+                </div>
+                <select class="comandos" name="comandos" id="comandos" multiple>
+                    <option value="forward" selected>Avançar</option>
+                    <option value="left" selected>Esquerda</option>
+                    <option value="right" selected>Direita</option>
+                    <option value="repeat">Repetir</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="saida" id="saida-modal">
+        <i id="btn-close-saida" class="bi bi-x-octagon"></i>
+        <h1>Resultado</h1>
+        <pre id="saida">
+            
+        </pre>
+    </div>
+    <script type="module" src="./editor.js"></script>
+</body>
+</html>
