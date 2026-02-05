@@ -101,9 +101,9 @@ const levels = {
             { x: 1, y: 7 }, { x: 2, y: 7 }, { x: 3, y: 7 }, { x: 4, y: 7 }, { x: 5, y: 7 }, { x: 6, y: 7 },
             // Bloqueando tudo exceto o caminho em degraus
             // Linha y=6
-            { x: 3, y: 6 }, { x: 4, y: 6 }, { x: 5, y: 6 }, { x: 6, y: 6 }, 
+            { x: 3, y: 6 }, { x: 4, y: 6 }, { x: 5, y: 6 }, { x: 6, y: 6 },
             // Linha y=5
-            { x: 1, y: 5 }, { x: 4, y: 5 }, { x: 5, y: 5 }, { x: 6, y: 5 }, 
+            { x: 1, y: 5 }, { x: 4, y: 5 }, { x: 5, y: 5 }, { x: 6, y: 5 },
             // Linha y=4
             { x: 1, y: 4 }, { x: 2, y: 4 }, { x: 5, y: 4 }, { x: 6, y: 4 },
             // Linha y=3
@@ -138,25 +138,25 @@ const levels = {
             { x: 7, y: 0 }, { x: 7, y: 1 }, { x: 7, y: 2 }, { x: 7, y: 3 }, { x: 7, y: 7 },
             // Bloqueio inferior
             { x: 1, y: 7 }, { x: 2, y: 7 }, { x: 3, y: 7 }, { x: 4, y: 7 }, { x: 5, y: 7 }, { x: 6, y: 7 },
-            
+
             // Paredes bloqueando todas as outras áreas EXCETO o caminho em L invertido
             // Caminho livre: (7,6) → (7,5) → (7,4) → (6,4) → (5,4) → (4,4) → (3,4) → (2,4) → (1,4)
-            
+
             // Linha y=6: bloquear exceto x=7
             { x: 1, y: 6 }, { x: 2, y: 6 }, { x: 3, y: 6 }, { x: 4, y: 6 }, { x: 5, y: 6 }, { x: 6, y: 6 },
-            
+
             // Linha y=5: bloquear exceto x=7
             { x: 1, y: 5 }, { x: 2, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 5 }, { x: 5, y: 5 }, { x: 6, y: 5 },
-            
+
             // Linha y=4: bloquear exceto x=1,2,3,4,5,6 (o caminho horizontal)
             // Caminho horizontal está em y=4, então nada para bloquear aqui que já não esteja
-            
+
             // Linha y=3: bloquear todas
             { x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }, { x: 4, y: 3 }, { x: 5, y: 3 }, { x: 6, y: 3 }, { x: 7, y: 3 },
-            
+
             // Linha y=2: bloquear todas
             { x: 1, y: 2 }, { x: 2, y: 2 }, { x: 3, y: 2 }, { x: 4, y: 2 }, { x: 5, y: 2 }, { x: 6, y: 2 }, { x: 7, y: 2 },
-            
+
             // Linha y=1: bloquear todas
             { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 }, { x: 4, y: 1 }, { x: 5, y: 1 }, { x: 6, y: 1 }, { x: 7, y: 1 },
         ],
@@ -217,7 +217,7 @@ function startLevel(levelNum) {
 }
 
 function nextLevel() {
-    if (gameState.currentLevel < 5) {
+    if (gameState.currentLevel < 6) {
         startLevel(gameState.currentLevel + 1);
     } else {
         switchScreen('menuScreen');
@@ -234,7 +234,7 @@ function initializeLevel() {
     gameState.executing = false;      // Não está executando
     gameState.executing_index = 0;    // Começa no comando 0
     gameState.executing_stack = [];   // Stack para loops aninhados
-    
+
     // INICIALIZAR POSIÇÃO DO ROBÔ
     // Posiciona o robô na posição inicial definida na fase
     robot = {
@@ -243,25 +243,25 @@ function initializeLevel() {
         dir: currentLevel.startDir,    // Direção inicial (0-3)
         trail: [],                     // Limpar histórico de movimento
     };
-    
+
     // ATUALIZAR INTERFACE DO JOGO
     // Mostra o nome e descrição da fase na tela
     document.getElementById('levelTitle').textContent = `Fase ${gameState.currentLevel} - ${currentLevel.name}`;
     document.getElementById('levelDesc').textContent = currentLevel.description;
     document.getElementById('commandLimit').textContent = currentLevel.commandLimit || '∞';  // Mostra limite de comandos
     document.getElementById('commandCount').textContent = '0';  // Zera contador de comandos usados
-    
+
     // MOSTRAR/ESCONDER BOTÕES DE COMANDO
     // Apenas os comandos permitidos pela fase aparecem como botões
-    document.getElementById('repeatBtn').style.display = 
+    document.getElementById('repeatBtn').style.display =
         currentLevel.allowedCommands.includes('repeat') ? 'block' : 'none';  // Mostrar se fase permite Repetir
-    document.getElementById('ifBtn').style.display = 
+    document.getElementById('ifBtn').style.display =
         currentLevel.allowedCommands.includes('if') ? 'block' : 'none';  // Mostrar se fase permite Se Livre
-    
+
     // LIMPAR ÁREA DE SEQUÊNCIA
     // Remove todos os blocos de comando adicionados pelo jogador
     clearSequence();
-    
+
     // DESENHAR CANVAS
     // Renderiza o mapa com paredes, robô e objetivo
     draw();
@@ -290,17 +290,17 @@ function allowDrop(e) {
 function drop(e) {
     e.preventDefault();  // Previne comportamento padrão
     e.currentTarget.classList.remove('drag-over');  // Remove visual especial
-    
+
     if (!draggedItem) return;
-    
+
     // Check command limit
     if (currentLevel.commandLimit && gameState.sequence.length >= currentLevel.commandLimit) {
         alert(`Limite de ${currentLevel.commandLimit} comandos atingido!`);
         return;
     }
-    
+
     let repeatValue = 2;  // Valor padrão para repetições (será perguntado ao usuário)
-    
+
     // COMANDO REPETIR - PEDIR QUANTIDADE DE VEZES
     // Se o comando for "repetir", pergunta quantas vezes repetir (1-10)
     if (draggedItem === 'repeat') {
@@ -312,7 +312,7 @@ function drop(e) {
             return;
         }
     }
-    
+
     // ADICIONAR COMANDO À SEQUÊNCIA
     // Cria um objeto com o tipo de comando e seu valor (se houver)
     const commandText = getCommandText(draggedItem);
@@ -320,7 +320,7 @@ function drop(e) {
         type: draggedItem,                                      // Tipo do comando
         value: draggedItem === 'repeat' ? repeatValue : null,  // Valor de repetição (ou null)
     });
-    
+
     // ATUALIZAR VISUAL DA SEQUÊNCIA
     renderSequence();  // Redesenha os blocos de comando na tela
     draggedItem = null;  // Limpa o item arrastado
@@ -346,13 +346,13 @@ function getCommandText(type, value) {
 // Mostra visualmente todos os comandos que o jogador adicionou
 function renderSequence() {
     const sequenceArea = document.getElementById('sequenceArea');  // Área onde aparecem os blocos
-    
+
     // SE NÃO HÁ COMANDOS, MOSTRAR MENSAGEM DE VAZIO
     if (gameState.sequence.length === 0) {
         sequenceArea.innerHTML = '<p class="placeholder">Arraste comandos aqui</p>';  // Mostra placeholder
         return;
     }
-    
+
     // CONSTRUIR HTML PARA CADA COMANDO
     let html = '';
     gameState.sequence.forEach((cmd, index) => {
@@ -365,7 +365,7 @@ function renderSequence() {
             </div>
         `;
     });
-    
+
     // COLOCAR HTML NA PÁGINA E ATUALIZAR CONTADOR
     sequenceArea.innerHTML = html;
     document.getElementById('commandCount').textContent = gameState.sequence.length;  // Atualiza contador de comandos
@@ -395,17 +395,17 @@ function executeSequence() {
         alert('Adicione comandos à sequência!');  // Aviso se nenhum comando foi adicionado
         return;
     }
-    
+
     gameState.executing = true;        // Marca como em execução
     gameState.executing_index = 0;     // Começa no primeiro comando
     robot.trail = [];                  // Limpa rastro anterior
-    
+
     // ACHATAR REPETIÇÕES EM SEQUÊNCIA LINEAR
     // Converte comandos Repetir em múltiplas cópias do comando
     // Exemplo: Repetir(2) [Andar, Esquerda] → [Andar, Esquerda, Andar, Esquerda]
     const flattenedSequence = flattenCommands(gameState.sequence);
     console.log('Sequência achatada:', flattenedSequence.map(c => c.type).join(' → '));
-    
+
     // Começa a executar o primeiro comando
     executeNextCommand(flattenedSequence, 0);
 }
@@ -414,10 +414,10 @@ function executeSequence() {
 // Recursiva para suportar Repetir aninhado
 function flattenCommands(commands, depth = 0) {
     let flattened = [];
-    
+
     for (let i = 0; i < commands.length; i++) {
         const cmd = commands[i];
-        
+
         if (cmd.type === 'repeat') {
             let repeatCount = cmd.value || 2;
             // Collect commands to repeat (until end or another repeat)
@@ -427,7 +427,7 @@ function flattenCommands(commands, depth = 0) {
                 repeatCommands.push(commands[j]);
                 j++;
             }
-            
+
             // Only process if there are commands to repeat
             if (repeatCommands.length > 0) {
                 for (let r = 0; r < repeatCount; r++) {
@@ -442,13 +442,13 @@ function flattenCommands(commands, depth = 0) {
             flattened.push(cmd);
         }
     }
-    
+
     return flattened;
 }
 
 function executeNextCommand(commands, index) {
     if (!gameState.executing) return;
-    
+
     if (index >= commands.length) {
         // Finished all commands
         gameState.executing = false;
@@ -457,10 +457,10 @@ function executeNextCommand(commands, index) {
         draw();
         return;
     }
-    
+
     const cmd = commands[index];
     console.log(`Passo ${index + 1}/${commands.length}: ${cmd.type}`);
-    
+
     // Handle if condition
     if (cmd.type === 'if') {
         const canMove = canMoveForward();
@@ -485,16 +485,16 @@ function executeNextCommand(commands, index) {
         setTimeout(() => executeNextCommand(commands, index + 1), 300);
         return;
     }
-    
+
     // Execute regular command
     const success = executeCommand(cmd.type);
     draw();
-    
+
     if (!success) {
         // Collision occurred
         return;
     }
-    
+
     setTimeout(() => executeNextCommand(commands, index + 1), 300);
 }
 
@@ -505,16 +505,16 @@ function executeCommand(type) {
         { x: -1, y: 0 },  // left
         { x: 0, y: -1 },  // up
     ];
-    
+
     if (type === 'forward') {
         const dir = dirs[robot.dir];
         const newX = robot.x + dir.x;
         const newY = robot.y + dir.y;
-        
+
         // Check boundaries and walls
         const outOfBounds = newX < 0 || newX >= currentLevel.grid || newY < 0 || newY >= currentLevel.grid;
         const hitWall = isWall(newX, newY);
-        
+
         if (!outOfBounds && !hitWall) {
             robot.x = newX;  // Atualiza coordenada X
             robot.y = newY;  // Atualiza coordenada Y
@@ -546,7 +546,7 @@ function executeCommand(type) {
         console.log(`  ✓ Virou para direita (direção: ${robot.dir})`);
         return true;
     }
-    
+
     return true;
 }
 
@@ -560,12 +560,12 @@ function canMoveForward() {
         { x: -1, y: 0 },   // Esquerda: -X
         { x: 0, y: -1 },   // Cima: -Y
     ];
-    
+
     // Calcula a próxima posição baseada na direção atual
     const dir = dirs[robot.dir];
     const newX = robot.x + dir.x;
     const newY = robot.y + dir.y;
-    
+
     // Verifica se a próxima posição é válida (não é parede, não sai do mapa)
     return !isWall(newX, newY) && newX >= 0 && newX < currentLevel.grid && newY >= 0 && newY < currentLevel.grid;
 }
@@ -600,10 +600,10 @@ function checkVictory() {
 function showVictory() {
     // Mostra quantidade de comandos usados
     document.getElementById('finalCommandCount').textContent = gameState.sequence.length;
-    
+
     // Mostra quantidade mínima de comandos (solução ótima)
     document.getElementById('optimalCommandCount').textContent = currentLevel.minimalCommands;
-    
+
     switchScreen('victoryScreen');  // Mostra tela de vitória
 }
 
@@ -622,12 +622,12 @@ const ctx = canvas.getContext('2d');  // Contexto 2D para desenhar
 function draw() {
     const tileSize = currentLevel.tileSize;
     const gridWidth = currentLevel.grid;
-    
+
     // LIMPAR CANVAS
     // Desenha fundo cinzento para apagar tudo que estava antes
     ctx.fillStyle = '#f5f5f5';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     // DESENHAR GRID (linhas do tabuleiro)
     // Linhas horizontais e verticais para criar as células
     ctx.strokeStyle = '#ddd';  // Cor cinza claro
@@ -637,13 +637,13 @@ function draw() {
         ctx.moveTo(i * tileSize, 0);
         ctx.lineTo(i * tileSize, gridWidth * tileSize);
         ctx.stroke();
-        
+
         ctx.beginPath();
         ctx.moveTo(0, i * tileSize);
         ctx.lineTo(gridWidth * tileSize, i * tileSize);
         ctx.stroke();
     }
-    
+
     // DESENHAR PAREDES (OBSTÁCULOS)
     // As paredes são armazenadas no array currentLevel.walls
     // Cada parede é um objeto {x, y} que representa a posição na grade
@@ -653,7 +653,7 @@ function draw() {
         // Multiplica por tileSize para converter da grade (0-7) para pixels
         ctx.fillRect(wall.x * tileSize, wall.y * tileSize, tileSize, tileSize);
     });
-    
+
     // DESENHAR RASTRO (caminho percorrido pelo robô)
     // O rastro mostra visualmente por onde o robô andou
     // Usa uma cor semi-transparente (rgba com 0.3 de opacidade = 30% de transparência)
@@ -670,7 +670,7 @@ function draw() {
         });
         ctx.stroke();  // Finaliza e desenha a linha
     }
-    
+
     // DESENHAR OBJETIVO (META DO NÍVEL)
     // O objetivo é representado como um círculo dourado onde o robô deve chegar
     ctx.fillStyle = '#FFD700';  // Cor dourada
@@ -686,7 +686,7 @@ function draw() {
         Math.PI * 2  // Acabar em 360 graus (2π radianos)
     );
     ctx.fill();  // Preenche o círculo com a cor definida
-    
+
     // DESENHAR ROBÔ
     // Chama a função drawRobot para desenhar o robô no canvas
     // Passa: posição X, posição Y, direção (0=direita, 1=baixo, 2=esquerda, 3=cima), tamanho
@@ -705,10 +705,10 @@ function drawRobot(x, y, dir, tileSize) {
     // Multiplica (x + 0.5) para obter o centro horizontal, não o canto esquerdo
     const centerX = (x + 0.5) * tileSize;
     const centerY = (y + 0.5) * tileSize;
-    
+
     // Define o tamanho do corpo do robô como 60% do tamanho da célula
     const robotSize = tileSize * 0.6;
-    
+
     // DESENHAR CORPO DO ROBÔ
     // O corpo é um quadrado azul centralizado na célula
     ctx.fillStyle = '#0088FF';  // Azul para o corpo
@@ -718,13 +718,13 @@ function drawRobot(x, y, dir, tileSize) {
         robotSize,  // Largura
         robotSize   // Altura
     );
-    
+
     // DESENHAR CABEÇA DO ROBÔ (INDICADOR DE DIREÇÃO)
     // A cabeça é um pequeno quadrado dourado que mostra para qual direção o robô está virado
     // Diferentes direções colocam a cabeça em diferentes posições do corpo
     ctx.fillStyle = '#FFD700';  // Dourado para a cabeça
     const headSize = robotSize * 0.3;  // Cabeça tem 30% do tamanho do corpo
-    
+
     // Define as posições da cabeça para cada direção possível
     // São deslocamentos relativos ao centro do robô
     const dirOffsets = [
@@ -733,7 +733,7 @@ function drawRobot(x, y, dir, tileSize) {
         { x: -robotSize / 2 + headSize / 2, y: -headSize / 2 },     // 2 = esquerda (cabeça à esquerda)
         { x: -headSize / 2, y: -robotSize / 2 + headSize / 2 },     // 3 = cima (cabeça para cima)
     ];
-    
+
     // Pega o deslocamento correto baseado na direção atual
     const offset = dirOffsets[dir];
     // Desenha a cabeça na posição correta conforme a direção
@@ -751,16 +751,16 @@ function drawRobot(x, y, dir, tileSize) {
 window.addEventListener('load', () => {
     // Mostra a tela do menu quando o jogo é carregado
     switchScreen('menuScreen');
-    
+
     // CONFIGURAR DRAG & DROP NA ÁREA DE SEQUÊNCIA
     // O usuário pode arrastar blocos de comando para a área de sequência
-    
+
     // Quando o usuário arrasta algo SOBRE a área de sequência
     document.getElementById('sequenceArea').addEventListener('dragover', (e) => {
         // Chama allowDrop para permitir que o item seja solto aqui
         allowDrop(e);
     });
-    
+
     // Quando o usuário sai da área de sequência SEM soltar o item
     document.getElementById('sequenceArea').addEventListener('dragleave', (e) => {
         // Remove a classe visual que destacava a área como zona de queda

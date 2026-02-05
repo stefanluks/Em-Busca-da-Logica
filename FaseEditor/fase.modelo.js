@@ -30,20 +30,29 @@ export default class Fase {
     }
 
     getObj(){
-        console.log(this)
         let toString = `{`
         for (const [key, value] of Object.entries(this)) {
             if(key == "walls"){
-                toString += `[`;
+                toString += `\n${key}:[`;
                 for(let pos of value){
-                    toString += `{x: ${pos.x},y:${pos.y}}`;
+                    toString += `{x: ${pos.x},y:${pos.y}},`;
                 }
-                toString += `]`;
+                toString += `],`;
+            }else if(key == "allowedCommands"){
+                console.log(key, value)
+                toString += `\n${key}:[`;
+                for(let i of value){
+                    toString += `"${i}",`;
+                }
+                toString += `],`;
+            }else if (isNaN(value)){
+                toString += `\n${key}: "${value}",`;
             }else{
                 toString += `\n${key}: ${value},`;
             }
         }
         toString += `}`
+        console.log(toString);
         return toString;
     }
 }
